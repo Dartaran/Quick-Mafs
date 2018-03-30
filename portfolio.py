@@ -24,8 +24,6 @@ Questions:
 
 import pandas as pd
 import numpy as np
-import statsmodels as sm
-import statsmodels.formula.api as smf
 
 MAX_LOOKBACK = 50
 
@@ -89,12 +87,3 @@ class PortfolioGenerator(object):
             daily_returns.append(np.mean(signal_return))
         sharpe_ratio = np.sqrt(252) * (np.mean(daily_returns) / np.std(daily_returns))
         return sharpe_ratio
-
-
-x = PortfolioGenerator()
-stock_df = x.read_stock_data()
-print(x.read_stock_data())
-
-result = smf.ols("market_cap ~ VIX", data = stock_df).fit()
-
-print(result.summary())
