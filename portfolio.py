@@ -77,6 +77,8 @@ class PortfolioGenerator(object):
         daily_returns = []
         stock_df = self.read_stock_data()
         for idx in stock_df.index.unique():
+            if idx > 200:
+                break
             print("timestep", idx)
             if idx < MAX_LOOKBACK:
                 continue
@@ -85,5 +87,6 @@ class PortfolioGenerator(object):
             signal = self.build_signal(stock_features)
             signal_return = returns * signal
             daily_returns.append(np.mean(signal_return))
+            print(str(np.mean(signal_return) / np.std(signal_return)))
         sharpe_ratio = np.sqrt(252) * (np.mean(daily_returns) / np.std(daily_returns))
         return sharpe_ratio
