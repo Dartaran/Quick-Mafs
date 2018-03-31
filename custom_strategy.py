@@ -13,7 +13,10 @@ Authors:
 from portfolio import PortfolioGenerator
 import pandas as pd
 import numpy as np
+import statsmodels.api as sm
 import statsmodels.formula.api as smf
+from sklearn.neural_network import MLPClassifier
+from sklearn import linear_model
 
 class CustomStrategy(PortfolioGenerator):
 
@@ -21,6 +24,7 @@ class CustomStrategy(PortfolioGenerator):
         pass
 
     def build_signal(self, stock_features):
+
         return self.momentum(stock_features)
 
     def momentum(self, stock_features):
@@ -75,9 +79,27 @@ x = PortfolioGenerator()
 stock_df = x.read_stock_data()
 print(x.read_stock_data())
 
-result = forward_selected(stock_df, "returns")
+# Forward selection stepwise regression
+data_df = stock_df[["VIX", "returns"]]
+result = forward_selected(data_df, "returns")
 
 print(result.summary())
+
+# GLM regression
+# data = stock_df
+# glm_df = stock_df.copy()
+# glm_df.drop("returns")
+# data.endog = glm_df
+# data.exog = stock_df["returns"]
+#
+# result = sm.GLM(data.endog, data.exog).fit()
+
+# training_x = stock_df.copy()
+# training_x.drop("returns")
+# training_x.drop("industry")
+# training_y = stock_df["returns"]
+# reg = linear_model.LinearRegression()
+# reg.fit(training_x, training_y)
 
 # result = smf.ols("market_cap ~ VIX", data = stock_df).fit()
 
